@@ -1,0 +1,3 @@
+include pytest_circleci/*.py
+include README
+include setup.py
