@@ -1,5 +1,5 @@
 
-import os
+import os, hashlib
 
 
 class CircleCIError(Exception):
@@ -34,8 +34,10 @@ def pytest_collection_modifyitems(session, config, items):
 
     """
     circle_node_total, circle_node_index = read_circleci_env_variables()
-
-    items.sort()
+    deselected = []
     for index, item in enumerate(list(items)):
-        if (index % circle_node_total) != circle_node_index:
+        item_hash = int(hashlib.sha1(':'.join(map(str, item.location))).hexdigest(), 16)
+        if (item_hash % circle_node_total) != circle_node_index:
+            deselected.append(item)
             items.remove(item)
+    config.hook.pytest_deselected(items=deselected)
