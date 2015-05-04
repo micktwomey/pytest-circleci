@@ -8,8 +8,8 @@ class CircleCIError(Exception):
 
 def read_circleci_env_variables():
     """Read and convert CIRCLE_* environment variables"""
-    circle_node_total = int(os.environ.get("CIRCLE_NODE_TOTAL", "1").strip())
-    circle_node_index = int(os.environ.get("CIRCLE_NODE_INDEX", "0").strip())
+    circle_node_total = int(os.environ.get("CIRCLE_NODE_TOTAL").strip() or "1")
+    circle_node_index = int(os.environ.get("CIRCLE_NODE_INDEX").strip() or "0")
 
     if circle_node_index >= circle_node_total:
         raise CircleCIError("CIRCLE_NODE_INDEX={} >= CIRCLE_NODE_TOTAL={}, should be less".format(circle_node_index, circle_node_total))
